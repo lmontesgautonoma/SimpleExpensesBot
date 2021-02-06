@@ -68,6 +68,7 @@ def earn_money (user_id, amount):
     db.session.add(earn)
     db.session.commit()
     return True
+#########################################################
 def update_account (user_id, amount):
     account = db.session.query(Account).get(user_id)
     db.session.commit()
@@ -76,5 +77,20 @@ def update_account (user_id, amount):
     account.balance = account.balance + amount
     db.session.commit()
     return True
-
+#########################################################
+def gastar_money (user_id, amount):
+    saldo=0
+    if amount <= 0:
+        return False
+    saldo=saldo-amount
+    control = update_account (user_id, saldo)
+    if not control:
+        return False
+    spend = Spending(
+        amount,
+        datetime.now(),
+        user_id)
+    db.session.add(spend)
+    db.session.commit()
+    return True
 
